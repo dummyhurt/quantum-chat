@@ -28,6 +28,21 @@ void server_hello(int sockfd);
  */
 void send_selected_algorithm(int sockfd, int choice);
 
+/*
+ * Receive the selected algorithm index
+ *
+ * IN:
+ *  socket filedes
+ */
 int receive_selected_algorithm(int sockfd);
+
+/*
+ * Send public key associated with chosen alg
+ *
+ * IN:
+ *  algorithm choice
+ *  buffer that holds pubkey
+ */
+void send_pubkey(int choice, char *pubkey);
 
 #endif

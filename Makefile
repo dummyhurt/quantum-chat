@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Iinclude
-# LDFLAGS = -loqs -lcrypto
+LDFLAGS = -loqs -lcrypto
 
 SRC_DIR = src
 BUILD_DIR = build

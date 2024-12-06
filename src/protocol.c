@@ -1,5 +1,6 @@
 #include "protocol.h"
 #include "sockets.h"
+#include "cryptography.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

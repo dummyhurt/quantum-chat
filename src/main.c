@@ -11,6 +11,13 @@
 
 #define BUFSIZE 1024
 
+/*
+ * This is a silly attempt to simulate Quantum TLS
+ * through linux processes in which a server and
+ * a client communicate thru computer gibberish
+ * in a quantum fashion (could a RAT read it?)
+ */
+
 // Server process
 void server() {
     int sockfd = create_server_socket(8080);
@@ -38,6 +45,10 @@ void server() {
     // Read algorithm pubkey to send to client
 
     // Send pubkey *
+
+    // Read encapsulation #
+
+    // BEGIN QUANTUM COMMUNICATIONS
 
     return;
 }
@@ -67,6 +78,12 @@ void client() {
     send_selected_algorithm(sockfd, chosen_alg);
 
     // Receive sv pubkey #
+
+    // Create secret encapuslation
+
+    // Send encapsulation *
+
+    // BEGIN QUANTUM COMMUNICATIONS
 
     return;
 }
