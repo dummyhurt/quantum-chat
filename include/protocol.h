@@ -19,4 +19,15 @@ void client_hello(int sockfd);
  */
 void server_hello(int sockfd);
 
+/*
+ * Select algorithm presented by
+ * server
+ * 
+ * IN:
+ *  list of algorithms (comma separated)
+ */
+void send_selected_algorithm(int sockfd, int choice);
+
+int receive_selected_algorithm(int sockfd);
+
 #endif

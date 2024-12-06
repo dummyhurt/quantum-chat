@@ -1,14 +1,17 @@
 #include "sockets.h"
 #include "protocol.h"
+#include "utils.h"
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
 #include <fcntl.h>
 
 #define BUFSIZE 1024
 
+// Server process
 void server() {
     int sockfd = create_server_socket(8080);
     int client_sockfd;
@@ -22,32 +25,52 @@ void server() {
 
     char buffer[BUFSIZE] = {0};
 
-    // Receive hello
+    // Receive hello #
     receive_data(client_sockfd, buffer, BUFSIZE);
     log("received - %s\n", buffer);
 
-    // Say hello
+    // Say hello and algs *
     server_hello(client_sockfd);   
+
+    // Receive chosen algorithm #
+    int choice = receive_selected_algorithm(client_sockfd);
+
+    // Read algorithm pubkey to send to client
+
+    // Send pubkey *
 
     return;
 }
 
+// Client process
 void client() {
     int sockfd = create_client_socket("127.0.0.1", 8080);
 
-    char buffer[BUFSIZE];
+    char buffer[BUFSIZE];   // recv buffer
 
-    // Say hello
+    // Say hello *
     client_hello(sockfd);
 
-    // Receive hello
+    // Receive hello #
     receive_data(sockfd, buffer, BUFSIZE);
     log("received - %s\n", buffer);
+
+    // Separate list from header
+    char **alg_list = dissect_server_algorithms(buffer);
+    int n_algs = print_algorithms(alg_list);
+
+    // Select algorithm
+    int chosen_alg = menu_algorithms(n_algs);
+    free_algorithm_array(alg_list);
+
+    // Send chosen algorithm *
+    send_selected_algorithm(sockfd, chosen_alg);
+
+    // Receive sv pubkey #
 
     return;
 }
 
-// main
 int main() {
     pid_t pid = fork();
     switch(pid) {
@@ -64,6 +87,5 @@ int main() {
         client();
         break;
     }
-
     return 0;
 }

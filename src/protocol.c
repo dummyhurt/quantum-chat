@@ -24,3 +24,18 @@ void server_hello(int sockfd) {
     }
     send_data(sockfd, buffer, strlen(buffer));
 }
+
+void send_selected_algorithm(int sockfd, int choice) {
+    char buffer[256];
+    snprintf(buffer, 256, "client_chose=%d", choice);
+    send_data(sockfd, buffer, strlen(buffer));
+}
+
+int receive_selected_algorithm(int sockfd) {
+    char buffer[256];
+    receive_data(sockfd, buffer, 256);
+    char *chosen_alg = strtok(buffer, "=");
+    chosen_alg = strtok(NULL, "=");
+    int choice = atoi(chosen_alg);  // WARNING
+    return choice;
+}

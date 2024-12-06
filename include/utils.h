@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define ALG_MAXLEN 512
+
 #define die(...) {fprintf(stderr, "[ERROR]: "); fprintf(stderr, __VA_ARGS__); fflush(stderr); exit(EXIT_FAILURE);}
 #define warn(...) {fprintf(stderr, "[WARN]: "); fprintf(stderr, __VA_ARGS__); fflush(stderr);}
 
@@ -29,5 +31,13 @@
 #define debug(...) ((void)0)
 
 #endif
+
+char **dissect_server_algorithms(char *buffer);
+
+void free_algorithm_array(char **alg_list);
+
+int print_algorithms(char **alg_list);
+
+int menu_algorithms(int n_algs);
 
 #endif
