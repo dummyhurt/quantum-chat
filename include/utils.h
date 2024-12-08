@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <oqs/kem.h>
+
 #define ALG_MAXLEN 512
 
 #define die(...) {fprintf(stderr, "[ERROR]: "); fprintf(stderr, __VA_ARGS__); fflush(stderr); exit(EXIT_FAILURE);}
@@ -39,5 +41,9 @@ void free_algorithm_array(char **alg_list);
 int print_algorithms(char **alg_list);
 
 int menu_algorithms(int n_algs);
+
+void write_to_file(char *fname, uint8_t *key, size_t len);
+
+void read_from_file(char *fname, uint8_t *key, size_t len);
 
 #endif
