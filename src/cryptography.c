@@ -63,8 +63,8 @@ void write_key(int choice, bool is_priv, uint8_t *key, size_t keylen, char *key_
 }
 
 void generate_keypair(int algo, bool is_priv, char *keyname) {
-    OQS_KEM *kem = create_kem_context(kems[algo]);
-    size_t klen = is_priv ? secretkey_lens[algo] : pubkey_lens[algo];
+    OQS_KEM *kem = create_kem_context(algo);
+    // size_t klen = is_priv ? secretkey_lens[algo] : pubkey_lens[algo];
     uint8_t pubkey[kem->length_public_key];
     uint8_t seckey[kem->length_secret_key];
 

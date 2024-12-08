@@ -5,17 +5,19 @@ LDFLAGS = -loqs -lcrypto
 SRC_DIR = src
 BUILD_DIR = build
 INCLUDE_DIR = include
+TARGET_DIR = targets
 
 #SRC = src/main.c src/sockets.c src/protocol.c
 SRC = $(wildcard $(SRC_DIR)/*.c)
 OBJ = $(patsubst $(SRC_DIR)/%.c, $(BUILD_DIR)/%.o, $(SRC))
 
-TARGET = chat_app
+all: chat_app keygen
 
-all: $(TARGET)
+chat_app: $(TARGET_DIR)/main.c $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $(OBJ) $(TARGET_DIR)/main.c $(LDFLAGS)
 
-$(TARGET): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $(OBJ) $(LDFLAGS)
+keygen: $(TARGET_DIR)/keygen_main.c $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $(OBJ) $(TARGET_DIR)/keygen_main.c  $(LDFLAGS)
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(BUILD_DIR)
