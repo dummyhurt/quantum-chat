@@ -1,4 +1,5 @@
 #include "sockets.h"
+#include "cryptography.h"
 #include "protocol.h"
 #include "utils.h"
 #include <sys/socket.h>
@@ -41,7 +42,7 @@ void server() {
 
     // Receive chosen algorithm #
     int choice = receive_selected_algorithm(client_sockfd);
-
+    log("chosen alg = %s\n", kems[choice]);
     // Read algorithm pubkey to send to client
 
     // Send pubkey *
@@ -68,7 +69,7 @@ void client() {
 
     // Separate list from header
     char **alg_list = dissect_server_algorithms(buffer);
-    int n_algs = print_algorithms(alg_list);
+    int n_algs = print_algorithms((const char **)alg_list);
 
     // Select algorithm
     int chosen_alg = menu_algorithms(n_algs);

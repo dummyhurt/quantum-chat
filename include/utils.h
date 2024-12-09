@@ -38,7 +38,7 @@ char **dissect_server_algorithms(char *buffer);
 
 void free_algorithm_array(char **alg_list);
 
-int print_algorithms(char **alg_list);
+int print_algorithms(const char **alg_list);
 
 int menu_algorithms(int n_algs);
 

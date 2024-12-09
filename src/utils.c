@@ -40,7 +40,7 @@ void free_algorithm_array(char **alg_list) {
     free(alg_list);
 }
 
-int print_algorithms(char **alg_list) {
+int print_algorithms(const char **alg_list) {
     int i;
     for (i = 0; alg_list[i] != NULL; i++)
         printf("Algorithm #%d: %s\n", i, alg_list[i]);

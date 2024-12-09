@@ -13,6 +13,34 @@
     die("SNTRUP761 is not defined - oqs/kem.h is missing?\n");
 #endif
 
+/* //////// externs \\\\\\\\ */
+
+extern const char *kems[];
+extern const int ciphertext_lens[];
+extern const int pubkey_lens[];
+extern const int secretkey_lens[];
+extern const int sharedsecret_lens[];
+
+/* //////// structures \\\\\\\\ */
+
+/*
+ * Structure that contains a keypair
+ * 
+ */
+typedef struct keypair {
+    uint8_t *pubkey;
+	size_t pubkey_length;
+	uint8_t *seckey;
+	size_t seckey_length;
+} Keypair;
+
+/* //////// funcs \\\\\\\\ */
+
+/*
+ * Return number of active algoritms
+ */
+int count_algorithms();
+
 /*
  * Creates KEM context for chosen alg
  * 
@@ -21,14 +49,14 @@
  */
 OQS_KEM *create_kem_context(int choice);
 
-typedef void (*fileio_fnt)(int, bool, uint8_t*, size_t, char*);
-typedef void (*kp_fnt)(int, bool, uint8_t*);
+typedef void (*fileio_fnt)(bool, uint8_t*, size_t, char*);
+typedef Keypair* (*kp_fnt)(int, char*);
 
 // to wrap the below io funcs
-void wrap_io_context(int choice, bool is_priv, uint8_t *key, size_t keylen, char*key_filename, fileio_fnt fio);
+void wrap_io_context(bool is_priv, uint8_t *key, size_t keylen, char*key_filename, fileio_fnt fio);
 
 // to wrap keypair fn
-void wrap_kp_context(int choice, bool is_priv, uint8_t *key, kp_fnt fkp);
+Keypair *wrap_kp_context(int choice, char *keyname, kp_fnt fkp);
 
 /*
  * Reads key from FILE
@@ -40,7 +68,7 @@ void wrap_kp_context(int choice, bool is_priv, uint8_t *key, kp_fnt fkp);
  *  sizeof key
  *  filename of key
  */
-void read_key(int choice, bool is_priv, uint8_t *key, size_t keylen, char *key_filename);
+void read_key(bool is_priv, uint8_t *key, size_t keylen, char *key_filename);
 
 /*
  * Writes key to FILE
@@ -52,7 +80,16 @@ void read_key(int choice, bool is_priv, uint8_t *key, size_t keylen, char *key_f
  *  sizeof key
  *  filename of key
  */
-void write_key(int choice, bool is_priv, uint8_t *key, size_t keylen, char *key_fname);
+void write_key(bool is_priv, uint8_t *key, size_t keylen, char *key_fname);
+
+
+/*
+ * Free a dynamically allocated keypair
+ *
+ * IN:
+ * 	Keypair to be freed
+ */
+void free_keypair(Keypair *keypair);
 
 /*
  * Generate a key pair
@@ -61,6 +98,6 @@ void write_key(int choice, bool is_priv, uint8_t *key, size_t keylen, char *key_
  *  algorithm choice
  *  name of keypair
  */
-void generate_keypair(int algo, bool is_priv, char *keyname);
+Keypair *generate_keypair(int algo, char *keyname);
 
 #endif

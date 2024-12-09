@@ -25,5 +25,6 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 
 clean:
 	rm -rf $(BUILD_DIR) $(TARGET)
+	rm chat_app keygen
 
 .PHONY: all clean
