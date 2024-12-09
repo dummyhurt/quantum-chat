@@ -109,7 +109,8 @@ Keypair *generate_keypair(int algo, char *keyname) {
     result->seckey_length = kem->length_secret_key;
     result->seckey = (uint8_t*) malloc(sizeof(uint8_t) * result->seckey_length);
 	snprintf((char*)result->seckey, result->seckey_length, "%s", seckey);
-
+    
+    free(kem);
     log("generated keypair called '%s'\n", keyname);
 	return result;
 }

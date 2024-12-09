@@ -22,6 +22,8 @@ int main (int argc, char *argv[]) {
 
     wrap_io_context(false, kp->pubkey, kp->pubkey_length, keyname, write_key);
     wrap_io_context(true, kp->seckey, kp->seckey_length, keyname, write_key); 
-
+    
+    free_keypair(kp);
+    
     return 0;
 }
