@@ -2,6 +2,7 @@
 #define PROTO_H
 
 #include "utils.h"
+#include "cryptography.h"
 
 /*
  * Send client_hello
@@ -40,9 +41,18 @@ int receive_selected_algorithm(int sockfd);
  * Send public key associated with chosen alg
  *
  * IN:
- *  algorithm choice
- *  buffer that holds pubkey
+ *  socket fd
+ *  keypair structure of kp generating party
  */
-void send_pubkey(int choice, char *pubkey);
+void send_pubkey(int sockfd, Keypair *kp);
+
+/*
+ * Receive pubkey
+ *
+ * IN:
+ *  socket fd
+ *  chosen alg index
+ */
+uint8_t *receive_pubkey(int sockfd, int choice);
 
 #endif

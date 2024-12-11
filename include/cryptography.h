@@ -28,6 +28,7 @@ extern const int sharedsecret_lens[];
  * 
  */
 typedef struct keypair {
+    OQS_KEM *kem;
     uint8_t *pubkey;
 	size_t pubkey_length;
 	uint8_t *seckey;
@@ -80,8 +81,16 @@ void read_key(bool is_priv, uint8_t *key, size_t keylen, char *key_filename);
  *  sizeof key
  *  filename of key
  */
-void write_key(bool is_priv, uint8_t *key, size_t keylen, char *key_fname);
+void write_key(bool is_priv, uint8_t *key, size_t keylen, char *key_filename);
 
+/*
+ * Writes keys to FILEs
+ *
+ * IN:
+ *  keypair object
+ *  key name
+ */
+void save_keypair(Keypair *kp, char *keyname);
 
 /*
  * Free a dynamically allocated keypair

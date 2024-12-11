@@ -20,9 +20,8 @@ int main (int argc, char *argv[]) {
 	
     Keypair *kp = wrap_kp_context(choice, keyname, generate_keypair);
 
-    wrap_io_context(false, kp->pubkey, kp->pubkey_length, keyname, write_key);
-    wrap_io_context(true, kp->seckey, kp->seckey_length, keyname, write_key); 
-    
+    save_keypair(kp, keyname);   
+ 
     free_keypair(kp);
     
     return 0;

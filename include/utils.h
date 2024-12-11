@@ -23,7 +23,7 @@
 #endif
 
 
-// #define DEBUG
+#define DEBUG
 #ifdef DEBUG
 
 #define debug(...) {fprintf(stdout, "[DEBUG]: "); fprintf(stdout, __VA_ARGS__); fflush(stdout);}

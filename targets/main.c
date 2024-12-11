@@ -43,10 +43,13 @@ void server() {
     // Receive chosen algorithm #
     int choice = receive_selected_algorithm(client_sockfd);
     log("chosen alg = %s\n", kems[choice]);
-    // Read algorithm pubkey to send to client
 
+    // Generate kp and send pubkey to client
+    Keypair *kp = wrap_kp_context(choice, "svkey", generate_keypair);            
+    debug("server kpgen\n");
     // Send pubkey *
-
+    send_pubkey(client_sockfd, kp);    
+    log("sv sent pubkey = \n%s\n%lu bytes\n", (char*) kp->pubkey, strlen((char*) kp->pubkey));
     // Read encapsulation #
 
     // BEGIN QUANTUM COMMUNICATIONS
@@ -79,7 +82,10 @@ void client() {
     send_selected_algorithm(sockfd, chosen_alg);
 
     // Receive sv pubkey #
-
+    uint8_t *sv_pubkey = receive_pubkey(sockfd, chosen_alg);
+    debug("cli received sv pubkey\n");
+    printf("PU=\n%s\n%lu bytes\n", (char*)sv_pubkey, strlen((char*) sv_pubkey));
+    free(sv_pubkey);
     // Create secret encapuslation
 
     // Send encapsulation *

@@ -93,7 +93,7 @@ void write_to_file(char *fname, uint8_t *key, size_t len) {
     FILE *file;
     file = fopen(fname, "wb");
     if (file == NULL) die("write_to_file fopen()\n");
-    size_t bytes_written = fwrite(key, 1, len, file);
+    size_t bytes_written = fwrite(key, sizeof(uint8_t), len, file);
     if (bytes_written != len) {
         fclose(file);
         die("write_to_file written != len\n");
@@ -105,7 +105,7 @@ void read_from_file(char *fname, uint8_t *key, size_t len) {
     FILE *file;
     file = fopen(fname, "rb");
     if (file == NULL) die ("read_from_file fopen()\n");
-    size_t bytes_read = fread(key, 1, len, file);
+    size_t bytes_read = fread(key, sizeof(uint8_t), len, file);
     if (bytes_read != len) {
         fclose(file);
         die("read_from_file read != len\n");

@@ -12,6 +12,10 @@ const char *algorithms[] = {
     NULL
 };
 
+extern const int ciphertext_lens[];
+extern const int pubkey_lens[];
+extern const int sharedsecret_lens[];
+
 void client_hello(int sockfd) {
     char *msg = "client_hello";
     send_data(sockfd, msg, strlen(msg));
@@ -39,4 +43,20 @@ int receive_selected_algorithm(int sockfd) {
     chosen_alg = strtok(NULL, "=");
     int choice = atoi(chosen_alg);  // WARNING
     return choice;
+}
+
+void send_pubkey(int sockfd, Keypair *kp) {
+    char buffer[2048];
+    snprintf(buffer, 2048, "PU=%s", (char*)kp->pubkey);
+    send_data(sockfd, buffer, strlen(buffer));
+}
+
+uint8_t *receive_pubkey(int sockfd, int choice) {
+    char buffer[2048];
+    receive_data(sockfd, buffer, 2048);
+    char *pk = strtok(buffer, "=");
+    pk = strtok(NULL, "=");
+    uint8_t *pubkey = (uint8_t*) malloc(sizeof(uint8_t) * pubkey_lens[choice]);
+    snprintf((char*) pubkey, pubkey_lens[choice], "%s", pk);
+    return pubkey;
 }

@@ -73,9 +73,9 @@ void read_key(bool is_priv, uint8_t *key, size_t keylen, char *key_filename) {
     log("read_key (%s) - read %d bytes\n", is_priv ? "secret" : "public", (int)keylen);
 }
 
-void write_key(bool is_priv, uint8_t *key, size_t keylen, char *key_fname) {
+void write_key(bool is_priv, uint8_t *key, size_t keylen, char *key_filename) {
     char tmpbuf[128];
-    snprintf(tmpbuf, 128, "%s%s", key_fname, is_priv ? ".priv" : ".pub");
+    snprintf(tmpbuf, 128, "%s%s", key_filename, is_priv ? ".priv" : ".pub");
     write_to_file(tmpbuf, key, keylen);
     log("write_key (%s) - wrote %d bytes\n", is_priv ? "secret" : "public", (int)keylen);
 }
@@ -83,7 +83,14 @@ void write_key(bool is_priv, uint8_t *key, size_t keylen, char *key_fname) {
 void free_keypair(Keypair *keypair) {
 	free(keypair->pubkey);
 	free(keypair->seckey);
+    free(keypair->kem);
 	free(keypair);
+}
+
+void save_keypair(Keypair *kp, char *keyname) {
+    wrap_io_context(false, kp->pubkey, kp->pubkey_length, keyname, write_key); 
+    wrap_io_context(true, kp->seckey, kp->seckey_length, keyname, write_key);
+    free_keypair(kp);
 }
 
 Keypair *generate_keypair(int algo, char *keyname) {
@@ -95,13 +102,9 @@ Keypair *generate_keypair(int algo, char *keyname) {
     if(OQS_KEM_keypair(kem, pubkey, seckey) != OQS_SUCCESS)
         die("generate_keypair OQS_KEM_keypair\n");
 
-    //char fname[128];
-    //snprintf(fname, 128, "%s.pub", keyname);
-    //write_key(algo, is_priv, pubkey, kem->length_public_key, fname);
-    //snprintf(fname, 128, "%s.priv", keyname);
-    //write_key(algo, is_priv, seckey, kem->length_secret_key, fname);
-
     Keypair *result = (Keypair*) malloc(sizeof(Keypair));
+    result->kem = kem;
+
     result->pubkey_length = kem->length_public_key;
     result->pubkey = (uint8_t*) malloc(sizeof(uint8_t) * result->pubkey_length);
 	snprintf((char*)result->pubkey, result->pubkey_length, "%s", pubkey);
@@ -110,7 +113,7 @@ Keypair *generate_keypair(int algo, char *keyname) {
     result->seckey = (uint8_t*) malloc(sizeof(uint8_t) * result->seckey_length);
 	snprintf((char*)result->seckey, result->seckey_length, "%s", seckey);
     
-    free(kem);
+    // free(kem);
     log("generated keypair called '%s'\n", keyname);
 	return result;
 }
